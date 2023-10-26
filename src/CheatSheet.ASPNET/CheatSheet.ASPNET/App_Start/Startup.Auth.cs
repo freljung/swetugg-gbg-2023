@@ -28,12 +28,10 @@ namespace CheatSheet.ASPNET
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 // Broken Access Control
-                ExpireTimeSpan = TimeSpan.FromMinutes(30),
-                SlidingExpiration = false,               
-                CookieSecure = CookieSecureOption.Always,
-
-                // Identification and Authentication Failures
                 CookieHttpOnly = true,
+                CookieSecure = CookieSecureOption.Always,
+                ExpireTimeSpan = TimeSpan.FromMinutes(30),
+                SlidingExpiration = false,
 
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),

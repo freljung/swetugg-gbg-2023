@@ -18,7 +18,8 @@ public class AmazingStorage
         
         // Entity Framework
         var context = new AmazingContext();
-        context.AmazingThings.FromSqlRaw("SELECT * FROM AmazingThings WHERE Id = " + amazingId).FirstOrDefault();
+        context.AmazingThings.FromSqlRaw(
+            "SELECT * FROM AmazingThings WHERE Id = " + amazingId).FirstOrDefault();
 
         // Dapper
         var amazingThing = connection.Query(
@@ -39,7 +40,8 @@ public class AmazingStorage
 
         // Entity Framework
         var context = new AmazingContext();
-        context.AmazingThings.FromSql($"SELECT * FROM AmazingThings WHERE Id = {amazingId}").FirstOrDefault();
+        context.AmazingThings.FromSql(
+            $"SELECT * FROM AmazingThings WHERE Id = {amazingId}").FirstOrDefault();
 
         // Dapper
         var amazingThing = connection.Query(

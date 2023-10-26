@@ -5,37 +5,22 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-builder.Services.AddControllers();
-
+// A01 Broken Access Control - Cookie settings
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        // Broken Access Control
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         options.SlidingExpiration = false;
     });
 
-// Identification and Authentication Failures
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.Expiration = TimeSpan.FromMinutes(30);
-    options.SlidingExpiration = true;
-});
 
-// Authorization policy
+// A01 Broken Access Control Enforce Authorization - Authorization policy
 builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
-
-    options.AddPolicy("User", new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .RequireRole("User")
-        .Build());
 
     options.AddPolicy("AwesomeUser", new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
@@ -45,11 +30,20 @@ builder.Services.AddAuthorization(options =>
 });
 
 
+
 // Does not add AntiForgery support
 builder.Services.AddControllers();
 
 // Calls services.AddAntiforgery(); by AddControllersWithViewsCore() -> AddViews() -> AddViewServices()
 builder.Services.AddControllersWithViews();
+
+// Identification and Authentication Failures
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.Expiration = TimeSpan.FromMinutes(30);
+    options.SlidingExpiration = true;
+});
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -64,7 +58,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 3;
 
     options.SignIn.RequireConfirmedEmail = true;
-    
+
     options.User.RequireUniqueEmail = true;
 });
 
@@ -96,10 +90,10 @@ app.UseHttpsRedirection();
 // );
 
 
+// A01 Broken Access Control - Cookie settings
 app.UseAuthorization()
     .UseCookiePolicy(new CookiePolicyOptions
     {
-        // Broken Access Control
         HttpOnly = HttpOnlyPolicy.Always,
         Secure = builder.Environment.IsDevelopment() ? CookieSecurePolicy.SameAsRequest
                                                      : CookieSecurePolicy.Always,

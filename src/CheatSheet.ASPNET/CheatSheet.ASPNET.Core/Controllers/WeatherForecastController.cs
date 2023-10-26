@@ -20,7 +20,7 @@ namespace CheatSheet.ASPNET.Core.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("decentWeather")]
         [Authorize(Roles = "User")]
         public IEnumerable<WeatherForecast> Get()
         {
@@ -33,30 +33,43 @@ namespace CheatSheet.ASPNET.Core.Controllers
             .ToArray();
         }
 
-        //[HttpGet]
-        //[Authorize(Policy = "AwesomeUser")]
-        //public IEnumerable<WeatherForecast> GetAwesomeWeather()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-        //        TemperatureC = Random.Shared.Next(20, 30),
-        //        Summary = "Awesome weather",
-        //    })
-        //    .ToArray();
-        //}
+        [HttpGet("awesomeWeather")]
+        [Authorize(Policy = "AwesomeUser")]
+        public IEnumerable<WeatherForecast> GetAwesomeWeather()
+        {
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(20, 30),
+                Summary = "Awesome weather",
+            })
+            .ToArray();
+        }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IEnumerable<WeatherForecast> GetAnonymousWeather()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-        //        TemperatureC = Random.Shared.Next(-20, 55),
-        //        Summary = "Who knows?",
-        //    })
-        //    .ToArray();
-        //}
+        [HttpGet("regularWeather")]
+        [Authorize]
+        public IEnumerable<WeatherForecast> GetRegularWeather()
+        {
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = "Who knows?",
+            })
+            .ToArray();
+        }
+
+        [HttpGet("crappyWeather")]
+        [AllowAnonymous]
+        public IEnumerable<WeatherForecast> GetAnonymousWeather()
+        {
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 0),
+                Summary = "Who knows?",
+            })
+            .ToArray();
+        }
     }
 }
