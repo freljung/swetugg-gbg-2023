@@ -30,6 +30,7 @@ namespace CheatSheet.ASPNET
                 // Broken Access Control
                 CookieHttpOnly = true,
                 CookieSecure = CookieSecureOption.Always,
+
                 ExpireTimeSpan = TimeSpan.FromMinutes(30),
                 SlidingExpiration = false,
 
